@@ -31,18 +31,6 @@ exports.getProducts = catchAsyncError(async (req, res, next)=>{
 
 //Create Product - /api/v1/product/new
 exports.newProduct = catchAsyncError(async (req, res, next)=>{
-    let images = [];
-    if(req.files.length > 0 ) 
-        req.files.forEach(file => {
-            let url =`${process.env.BACKEND_URL}/uploads/product/${file.originalname}`;
-            images.push({image: url})
-        });
-
-    req.body.images = images;
-
-    req.body.user = req.user.id;
-
-
     const product = await Product.create(req.body);
     res.status(201).json({
         success: true,
@@ -176,47 +164,5 @@ exports.getReviews = catchAsyncError(async (req, res, next) =>{
     res.status(200).json({
         success: true,
         reviews: product.reviews
-    })
-})
-
-//Delete Review - api/v1/review
-exports.deleteReview = catchAsyncError(async (req, res, next) =>{
-    const product = await Product.findById(req.query.productId);
-    
-    //filtering the reviews which does match the deleting review id
-    const reviews = product.reviews.filter(review => {
-       return review._id.toString() !== req.query.id.toString()
-    });
-    //number of reviews 
-    const numOfReviews = reviews.length;
-
-    //finding the average with the filtered reviews
-    let ratings = reviews.reduce((acc, review) => {
-        return review.rating + acc;
-    }, 0) / reviews.length;
-    ratings = isNaN(ratings)?0:ratings;
-
-    //save the product document
-    await Product.findByIdAndUpdate(req.query.productId, {
-        reviews,
-        numOfReviews,
-        ratings
-    })
-    res.status(200).json({
-        success: true
-    })
-
-
-});
-
-
-//Get Admin Products - /api/v1/admin/products
-exports.getAdminProducts = catchAsyncError(async (req, res, next)=>{
-    
-    const products = await Product.find();
-
-    res.status(200).json({
-        success : true,
-        products
     })
 })
