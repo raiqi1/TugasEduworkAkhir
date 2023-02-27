@@ -19,7 +19,11 @@ export default function Header() {
       <div className="col-12 col-md-3">
         <div className="navbar-brand">
           <Link to="/">
-            <img width="150px" alt="Tokopedia Logo" src="/images/logo-tokopedia.png" />
+            <img
+              width="150px"
+              alt="Tokopedia Logo"
+              src="/images/logo-tokopedia.png"
+            />
           </Link>
         </div>
       </div>
@@ -44,6 +48,16 @@ export default function Header() {
               <span>{user.name}</span>
             </Dropdown.Toggle>
             <Dropdown.Menu>
+              {user.role === "admin" && (
+                <Dropdown.Item
+                  onClick={() => {
+                    navigate("/admin/dashboard");
+                  }}
+                  className="text-dark"
+                >
+                  Dashboard
+                </Dropdown.Item>
+              )}
               <Dropdown.Item
                 onClick={() => {
                   navigate("/myprofile");

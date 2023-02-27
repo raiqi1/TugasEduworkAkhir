@@ -18,6 +18,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
         e.preventDefault();
         dispatch(login(email, password))
     }
+    console.log(submitHandler)
 
     useEffect(() => {
         if(isAuthenticated) {
